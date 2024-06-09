@@ -4,8 +4,9 @@ import { v4 as uuidv4 } from 'uuid';
 import PDFParser from 'pdf2json';
 import axios from 'axios';
 
-const ZOHO_ESIGN_API_URL = 'https://sign.zoho.com/api/v1';
-const ZOHO_ACCESS_TOKEN = 'your_zoho_access_token'; // Replace with your Zoho access token
+const ZOHO_ESIGN_API_URL = 'https://accounts.zoho.com/oauth/v2/token';
+const ZOHO_ACCESS_TOKEN =
+  '1000.2deaf8d0c268e3c85daa2a013a843b10.703adef2bb337b 8ca36cfc5d7b83cf24';
 
 export async function POST(req: NextRequest) {
   const formData = await req.formData();
@@ -14,7 +15,7 @@ export async function POST(req: NextRequest) {
   let parsedText = '';
 
   if (uploadedFiles && uploadedFiles.length > 0) {
-    const uploadedFile = uploadedFiles[0]; // Use the correct index
+    const uploadedFile = uploadedFiles[0];
 
     if (uploadedFile instanceof File) {
       fileName = uuidv4();
@@ -38,7 +39,7 @@ export async function POST(req: NextRequest) {
         pdfParser.loadPDF(tempFilePath);
       });
 
-      await fs.unlink(tempFilePath); // Clean up temporary file
+      await fs.unlink(tempFilePath);
 
       // Send the file to Zoho eSign for e-signing
       const eSignResponse = await sendToZohoESign(fileBuffer, fileName);
